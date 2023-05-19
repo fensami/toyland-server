@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
 require('dotenv').config()
 const app = express();
@@ -30,19 +30,21 @@ async function run() {
     const allToysCollection = client.db('toyLand').collection('allToys')
 
 
+
+    app.get('/allToys', async(req, res) => {
+        const result = await allToysCollection.find().toArray();
+        res.send(result)
+    })
+    // app.get('/allToys', async(res, req) => {
+    //     const result = await allToysCollection.find().toArray();
+    //     res.send(result)
+    // })
     app.post('/allToys', async(req, res) => {
         const addToys = req.body;
         console.log(addToys);
         const result =await allToysCollection.insertOne(addToys);
         res.send(result)
     })
-
-    // app.post('/bookings', async(req, res) => {
-    //     const booking =req.body;
-    //     console.log(booking);
-    //     const result = await bookingCollection.insertOne(booking);
-    //     res.send(result)
-    //   })
 
 
     // Send a ping to confirm a successful connection
